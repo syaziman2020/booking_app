@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "265190438338",
+    "project_id": "booking-app-cc21c",
+    "storage_bucket": "booking-app-cc21c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265190438338:android:e4e127e1c3065ad9e2d25b",
+        "android_client_info": {
+          "package_name": "com.uray.bookingroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "265190438338-k9uivhbubvdlu78og7gn1hgl2unfd4i6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uray.bookingroom",
+            "certificate_hash": "de5247eadc182613cf8a39d943b7f7fc8298eb3d"
+          }
+        },
+        {
+          "client_id": "265190438338-e6e148aobqvqq6sojho8kke8tspa1ela.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZvEczWen7cXRAmtmtfu0yoLvjQMrcgQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "265190438338-e6e148aobqvqq6sojho8kke8tspa1ela.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
