@@ -5,8 +5,9 @@ class RoomModel extends Equatable {
   final String title;
   final String location;
   final String imageUrl;
-  final bool status;
+  bool status;
   final String date;
+  final String desc;
 
   RoomModel({
     required this.id,
@@ -15,6 +16,7 @@ class RoomModel extends Equatable {
     this.imageUrl = '',
     this.status = false,
     this.date = '',
+    this.desc = '',
   });
 
   factory RoomModel.fromJson(String id, Map<String, dynamic> json) => RoomModel(
@@ -24,6 +26,7 @@ class RoomModel extends Equatable {
         imageUrl: json['imageUrl'],
         status: json['status'],
         date: json['date'],
+        desc: json['description'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,6 +36,7 @@ class RoomModel extends Equatable {
         'imageUrl': imageUrl,
         'status': status,
         'date': date,
+        'description': desc,
       };
 
   @override
@@ -43,5 +47,6 @@ class RoomModel extends Equatable {
         imageUrl,
         status,
         date,
+        desc,
       ];
 }

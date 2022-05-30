@@ -12,6 +12,11 @@ class UserModel extends Equatable {
     required this.name,
     required this.nim,
   });
+
+  get nameGet {
+    return name;
+  }
+
   @override
   List<Object?> get props => [
         id,

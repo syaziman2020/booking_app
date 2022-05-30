@@ -4,7 +4,7 @@ import 'package:booking_app/cubit/room_cubit.dart';
 import 'package:booking_app/shared/theme.dart';
 import 'package:booking_app/ui/pages/order_page.dart';
 import 'package:booking_app/ui/pages/profile_page.dart';
-import 'package:booking_app/ui/pages/search_page.dart';
+
 import 'package:booking_app/ui/widgets/card_content.dart';
 import 'package:booking_app/ui/widgets/little_card.dart';
 import 'package:booking_app/ui/widgets/navigation_item.dart';
@@ -68,8 +68,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   );
-                } else
-                  return SizedBox();
+                } else {
+                  return const SizedBox();
+                }
               },
             ),
           ),
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
       return Container(
         width: size.width,
         height: 70,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: whiteC,
         ),
         child: Padding(
@@ -98,27 +99,19 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               NavigationItem(
-                title: 'Search',
-                svgUrl: 'assets/icons/search.svg',
+                title: 'Order',
+                svgUrl: 'assets/icons/order3.svg',
                 index: 1,
                 onTap: () {
                   context.read<CurrentPageCubit>().currentPage(1);
                 },
               ),
               NavigationItem(
-                title: 'Order',
-                svgUrl: 'assets/icons/order3.svg',
+                title: 'Profile',
+                svgUrl: 'assets/icons/profile.svg',
                 index: 2,
                 onTap: () {
                   context.read<CurrentPageCubit>().currentPage(2);
-                },
-              ),
-              NavigationItem(
-                title: 'Profile',
-                svgUrl: 'assets/icons/profile.svg',
-                index: 3,
-                onTap: () {
-                  context.read<CurrentPageCubit>().currentPage(3);
                 },
               ),
             ],
@@ -212,7 +205,7 @@ class _HomePageState extends State<HomePage> {
               ],
             );
           }
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         },
@@ -224,14 +217,12 @@ class _HomePageState extends State<HomePage> {
         case 0:
           return homeContent();
         case 1:
-          return SearchPage();
+          return const OrderPage();
         case 2:
-          return OrderPage();
-        case 3:
-          return ProfilePage();
+          return const ProfilePage();
 
         default:
-          return HomePage();
+          return homeContent();
       }
     }
 

@@ -1,44 +1,33 @@
+import 'package:booking_app/cubit/current_page_cubit.dart';
+import 'package:booking_app/cubit/order_cubit.dart';
+import 'package:booking_app/cubit/room_cubit.dart';
+import 'package:booking_app/models/order_model.dart';
 import 'package:booking_app/models/room_model.dart';
 import 'package:booking_app/ui/widgets/custom_button.dart';
-import 'package:date_time_picker/date_time_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dialog_alert/dialog_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-
 import '../../shared/theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DetailPage extends StatefulWidget {
   final RoomModel roomModel;
-  const DetailPage({Key? key, required this.roomModel}) : super(key: key);
+  OrderModel? orderModel;
+
+  DetailPage({
+    Key? key,
+    required this.roomModel,
+    this.orderModel,
+  }) : super(key: key);
 
   @override
   State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
-  late TextEditingController _controller3;
-  String _valueToValidate3 = '';
-  String _valueSaved3 = '';
-
-  Future<void> _getValue() async {
-    await Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        //_initialValue = '2000-10-22 14:30';
-        _controller3.text = '2002-11-22';
-      });
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Intl.defaultLocale = 'pt_BR';
-    //_initialValue = DateTime.now().toString();
-
-    _controller3 = TextEditingController(text: DateTime.now().toString());
-
-    _getValue();
-  }
+  DateTime? _dateTime;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +40,7 @@ class _DetailPageState extends State<DetailPage> {
         width: double.infinity,
         height: size.height * 0.4,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(14),
             bottomRight: Radius.circular(14),
           ),
@@ -115,7 +104,7 @@ class _DetailPageState extends State<DetailPage> {
                         width: 20,
                         height: 20,
                       ),
-                SizedBox(
+                const SizedBox(
                   width: 5,
                 ),
                 (widget.roomModel.status)
@@ -135,36 +124,57 @@ class _DetailPageState extends State<DetailPage> {
                       )
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
-            Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/note.svg',
-                  width: 20,
-                  height: 20,
-                  fit: BoxFit.cover,
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                (widget.roomModel.status)
-                    ? Text(
-                        widget.roomModel.date,
-                        style: blackTextStyle.copyWith(
-                          color: blackC,
+            GestureDetector(
+              onTap: () {
+                showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(2022),
+                  lastDate: DateTime(2099),
+                ).then((date) {
+                  //tambahkan setState dan panggil variabel _dateTime.
+                  setState(() {
+                    _dateTime = date;
+                    context.read<RoomCubit>().updateDate(
+                          widget.roomModel.id,
+                          DateFormat('dd-MM-yyyy').format(date!).toString(),
+                        );
+                  });
+                });
+              },
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    'assets/icons/note.svg',
+                    width: 20,
+                    height: 20,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  (widget.roomModel.status)
+                      ? Text(
+                          widget.roomModel.date,
+                          style: blackTextStyle.copyWith(
+                            color: blackC,
+                          ),
+                        )
+                      : Text(
+                          (_dateTime == null)
+                              ? '-'
+                              : DateFormat('dd-MM-yyyy').format(_dateTime!),
+                          style: blackTextStyle.copyWith(
+                            color: blackC,
+                          ),
                         ),
-                      )
-                    : Text(
-                        '-',
-                        style: blackTextStyle.copyWith(
-                          color: blackC,
-                        ),
-                      ),
-              ],
+                ],
+              ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Row(
@@ -175,7 +185,7 @@ class _DetailPageState extends State<DetailPage> {
                   height: 20,
                   fit: BoxFit.cover,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 Text(
@@ -186,7 +196,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ],
             ),
-            SizedBox(height: 18),
+            const SizedBox(height: 18),
             Text(
               'About Room',
               style: blackTextStyle.copyWith(
@@ -194,47 +204,66 @@ class _DetailPageState extends State<DetailPage> {
                 fontWeight: semiBold,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 9,
             ),
             Text(
-              'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, ',
+              widget.roomModel.desc,
               style: blackTextStyle.copyWith(
                 color: blackC.withOpacity(0.8),
                 fontSize: 12,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 45,
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: CustomButton(
-                title: 'Booked Now',
-                onTap: () {
-                  DateTimePicker(
-                    type: DateTimePickerType.dateTimeSeparate,
-                    dateMask: 'd MMM, yyyy',
-                    initialValue: DateTime.now().toString(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                    icon: Icon(Icons.event),
-                    dateLabelText: 'Date',
-                    timeLabelText: "Hour",
-                    selectableDayPredicate: (date) {
-                      // Disable weekend days to select from the calendar
-                      if (date.weekday == 6 || date.weekday == 7) {
-                        return false;
+              child: BlocConsumer<OrderCubit, OrderState>(
+                listener: (context, state) {
+                  if (state is OrderSuccess) {
+                    context.read<CurrentPageCubit>().currentPage(1);
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/home', (route) => false);
+                  } else if (state is OrderFailed) {
+                    showDialogAlert(
+                      context: context,
+                      title: 'Failed',
+                      message: state.error,
+                      actionButtonTitle: 'OK',
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  return CustomButton(
+                    title: 'Booked Now',
+                    onTap: () {
+                      if (widget.roomModel.status) {
+                        showDialogAlert(
+                          context: context,
+                          title: 'Sorry',
+                          message: 'This room already booked',
+                          actionButtonTitle: 'OK',
+                        );
+                      } else {
+                        context.read<OrderCubit>().createOrder(OrderModel(
+                              room: widget.roomModel,
+                            ));
+                        setState(() {
+                          FirebaseFirestore.instance
+                              .collection('rooms')
+                              .doc(widget.roomModel.id)
+                              .update({
+                            'room': {
+                              'date':
+                                  (DateFormat('dd-MM-yyyy').format(_dateTime!))
+                            }
+                          });
+                        });
+                        context.read<RoomCubit>().updateStatus(
+                            widget.roomModel.id, !widget.roomModel.status);
                       }
-
-                      return true;
                     },
-                    onChanged: (val) => print(val),
-                    validator: (val) {
-                      print(val);
-                      return null;
-                    },
-                    onSaved: (val) => print(val),
                   );
                 },
               ),
@@ -244,16 +273,14 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: bgC,
-        body: ListView(
-          padding: EdgeInsets.all(0),
-          children: [
-            pictContent(),
-            content(),
-          ],
-        ),
+    return Scaffold(
+      backgroundColor: bgC,
+      body: ListView(
+        padding: const EdgeInsets.all(0),
+        children: [
+          pictContent(),
+          content(),
+        ],
       ),
     );
   }

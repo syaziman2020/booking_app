@@ -37,14 +37,14 @@ class ProfilePage extends StatelessWidget {
                         'Name : ${state.user.name}',
                         style: blackTextStyle.copyWith(fontSize: 16),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'NIM : ${state.user.nim}',
                         style: blackTextStyle.copyWith(fontSize: 16),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
@@ -53,8 +53,9 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ],
                   );
-                } else
-                  return SizedBox();
+                } else {
+                  return const SizedBox();
+                }
               },
             ),
           ),
@@ -65,10 +66,10 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgC,
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 0),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
         children: [
           profileInfo(),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
           BlocConsumer<AuthCubit, AuthState>(
@@ -88,7 +89,7 @@ class ProfilePage extends StatelessWidget {
             },
             builder: (context, state) {
               if (state is AuthLoading) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/room_model.dart';
 
 class RoomServices {
-  CollectionReference _roomReference =
+  final CollectionReference _roomReference =
       FirebaseFirestore.instance.collection('rooms');
 
   Future<List<RoomModel>> fetchRooms() async {
@@ -16,6 +16,22 @@ class RoomServices {
         },
       ).toList();
       return rooms;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  void updateStatus(String id, bool status) async {
+    try {
+      var updateStatus = _roomReference.doc(id).update({'status': status});
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  void updateDate(String id, String date) async {
+    try {
+      var updateDate = _roomReference.doc(id).update({'date': date});
     } catch (e) {
       throw e;
     }

@@ -16,4 +16,22 @@ class RoomCubit extends Cubit<RoomState> {
       emit(RoomFailed(e.toString()));
     }
   }
+
+  void updateStatus(String id, bool status) async {
+    try {
+      emit(RoomLoading());
+      RoomServices().updateStatus(id, status);
+    } catch (e) {
+      emit(RoomFailed(e.toString()));
+    }
+  }
+
+  void updateDate(String id, String date) async {
+    try {
+      emit(RoomLoading());
+      RoomServices().updateDate(id, date);
+    } catch (e) {
+      emit(RoomFailed(e.toString()));
+    }
+  }
 }

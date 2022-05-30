@@ -1,8 +1,8 @@
 import 'package:booking_app/cubit/auth_cubit.dart';
 import 'package:booking_app/cubit/current_page_cubit.dart';
+import 'package:booking_app/cubit/order_cubit.dart';
 import 'package:booking_app/cubit/room_cubit.dart';
 import 'package:booking_app/models/room_model.dart';
-import 'package:booking_app/ui/pages/detail_page.dart';
 import 'package:booking_app/ui/pages/home_page.dart';
 import 'package:booking_app/ui/pages/introduction_page.dart';
 import 'package:booking_app/ui/pages/login_page.dart';
@@ -36,6 +36,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => RoomCubit(),
         ),
+        BlocProvider(
+          create: (context) => OrderCubit(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -46,7 +49,6 @@ class MyApp extends StatelessWidget {
           '/register': (context) => RegisterPage(),
           '/login': (context) => LoginPage(),
         },
-        supportedLocales: [Locale('en', 'US')],
       ),
     );
   }

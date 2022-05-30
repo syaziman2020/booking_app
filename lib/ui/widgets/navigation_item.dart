@@ -9,7 +9,7 @@ class NavigationItem extends StatelessWidget {
   final String title;
   final int index;
   final Function() onTap;
-  NavigationItem({
+  const NavigationItem({
     Key? key,
     required this.title,
     required this.svgUrl,

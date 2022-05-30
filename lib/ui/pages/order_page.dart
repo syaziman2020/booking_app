@@ -1,108 +1,88 @@
+import 'package:booking_app/cubit/order_cubit.dart';
+import 'package:booking_app/cubit/room_cubit.dart';
+import 'package:booking_app/models/order_model.dart';
+import 'package:dialog_alert/dialog_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../shared/theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class OrderPage extends StatelessWidget {
+import '../widgets/order_card.dart';
+
+class OrderPage extends StatefulWidget {
   const OrderPage({Key? key}) : super(key: key);
 
   @override
+  State<OrderPage> createState() => _OrderPageState();
+}
+
+class _OrderPageState extends State<OrderPage> {
+  OrderModel? orderModel;
+  @override
+  void initState() {
+    context.read<OrderCubit>().fetchOrders();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: ListView(
-        padding: EdgeInsets.only(top: 30),
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: 14,
-            ),
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24),
-                  padding: const EdgeInsets.all(12),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: whiteC,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 80,
-                            height: 80,
-                            margin: const EdgeInsets.only(right: 12),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage(
-                                  'assets/images/image2.png',
-                                ),
-                              ),
-                            ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Siskom 2',
-                                style: blackTextStyle.copyWith(
-                                  fontWeight: medium,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 4,
-                              ),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/icons/location1.svg',
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    'Siskom, MIPA',
-                                    style: greyTextStyleC,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/icons/note.svg',
-                                    width: 20,
-                                    height: 20,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '15-17 Agustus 2022',
-                                    style: greyTextStyleC,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+      body: BlocBuilder<OrderCubit, OrderState>(
+        builder: (context, state) {
+          if (state is RoomLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is OrderSuccess) {
+            if (state.orders.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/empty.png',
+                      width: size.width * 0.7,
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Order is Empty',
+                      style: blueTextStyle.copyWith(
+                          fontSize: 20, fontWeight: medium),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        ],
+              );
+            } else {
+              return ListView.builder(
+                itemCount: state.orders.length,
+                itemBuilder: (context, index) {
+                  return OrderCard(
+                    onTap: () {
+                      showDialogAlert(
+                        context: context,
+                        title: 'Message',
+                        message: 'Do you want to delete your order?',
+                        actionButtonTitle: 'Yes',
+                        cancelButtonTitle: 'No',
+                      );
+                    },
+                    orderModel: state.orders[index],
+                  );
+                },
+                padding: const EdgeInsets.only(top: 30),
+              );
+            }
+          }
+          return Center(
+              child: Text(
+            'order',
+            style: blackTextStyle,
+          ));
+        },
       ),
     );
   }

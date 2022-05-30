@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
               fontSize: 24,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Text(
@@ -51,7 +51,7 @@ class LoginPage extends StatelessWidget {
           ListView(
             children: [
               Container(
-                padding: EdgeInsets.fromLTRB(24, 30, 24, 0),
+                padding: const EdgeInsets.fromLTRB(24, 30, 24, 0),
                 margin: EdgeInsets.only(top: size.height * 0.35),
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -91,7 +91,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     BlocConsumer<AuthCubit, AuthState>(
@@ -110,7 +110,7 @@ class LoginPage extends StatelessWidget {
                       },
                       builder: (context, state) {
                         if (state is AuthLoading) {
-                          return Center(
+                          return const Center(
                             child: CircularProgressIndicator(),
                           );
                         }
